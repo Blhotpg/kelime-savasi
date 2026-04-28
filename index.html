@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kelime Savaşı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== GİRİŞ EKRANI ========== -->
+  <div id="girisEkrani" class="ekran aktif">
+    <div class="giris-kutu">
+      <div class="logo">
+        <span class="logo-k">K</span>
+        <span class="logo-s">S</span>
+      </div>
+      <h1 class="baslik">Kelime Savaşı</h1>
+      <p class="alt-baslik">Sırayla harf ekle — Kelimeyi tamamlarsan kaybedersin!</p>
+
+      <input type="text" id="oyuncuAdiInput" placeholder="Adını gir..." maxlength="16" />
+
+      <div class="buton-grup">
+        <button class="btn btn-ana" onclick="odaOlustur()">🏠 Oda Oluştur</button>
+        <div class="ayirici">ya da</div>
+        <input type="text" id="odaKoduInput" placeholder="Oda kodu gir..." maxlength="6" style="text-transform:uppercase" />
+        <button class="btn btn-ikincil" onclick="odayaKatil()">⚔️ Katıl</button>
+      </div>
+
+      <div id="hatamesaji" class="hata-mesaj gizli"></div>
+    </div>
+  </div>
+
+  <!-- ========== BEKLEME EKRANI ========== -->
+  <div id="beklemeEkrani" class="ekran">
+    <div class="bekleme-kutu">
+      <div class="spinner"></div>
+      <h2>Rakip bekleniyor...</h2>
+      <p>Oda kodunu arkadaşına gönder:</p>
+      <div class="oda-kodu-goster" id="odaKoduGoster">------</div>
+      <button class="btn btn-kopyala" onclick="koduKopyala()">📋 Kodu Kopyala</button>
+      <p class="ipucu">Rakibinin bu kodu girmesini bekle</p>
+    </div>
+  </div>
+
+  <!-- ========== OYUN EKRANI ========== -->
+  <div id="oyunEkrani" class="ekran">
+
+    <!-- Üst bilgi çubuğu -->
+    <div class="ust-bilgi">
+      <div class="oyuncu-kart sol" id="oyuncuKart1">
+        <div class="oyuncu-ad" id="oyuncuAd1">Oyuncu 1</div>
+        <div class="oyuncu-skor" id="oyuncuSkor1">0</div>
+      </div>
+
+      <div class="tur-bilgi">
+        <div class="tur-no" id="turNo">TUR 1</div>
+        <div class="sira-gostergesi" id="siraGostergesi">—</div>
+      </div>
+
+      <div class="oyuncu-kart sag" id="oyuncuKart2">
+        <div class="oyuncu-ad" id="oyuncuAd2">Oyuncu 2</div>
+        <div class="oyuncu-skor" id="oyuncuSkor2">0</div>
+      </div>
+    </div>
+
+    <!-- Harf alanı -->
+    <div class="harf-alani">
+      <div class="harf-ekran" id="harfEkran">
+        <span class="harf-placeholder">Henüz harf yok...</span>
+      </div>
+      <div class="harf-sayisi" id="harfSayisi">0 harf</div>
+    </div>
+
+    <!-- Klavye -->
+    <div class="klavye" id="klavye">
+      <div class="klavye-satir">
+        <button class="tus" onclick="harfTiklandi('e')">E</button>
+        <button class="tus" onclick="harfTiklandi('r')">R</button>
+        <button class="tus" onclick="harfTiklandi('t')">T</button>
+        <button class="tus" onclick="harfTiklandi('y')">Y</button>
+        <button class="tus" onclick="harfTiklandi('u')">U</button>
+        <button class="tus" onclick="harfTiklandi('ı')">I</button>
+        <button class="tus" onclick="harfTiklandi('o')">O</button>
+        <button class="tus" onclick="harfTiklandi('p')">P</button>
+      </div>
+      <div class="klavye-satir">
+        <button class="tus" onclick="harfTiklandi('a')">A</button>
+        <button class="tus" onclick="harfTiklandi('s')">S</button>
+        <button class="tus" onclick="harfTiklandi('d')">D</button>
+        <button class="tus" onclick="harfTiklandi('f')">F</button>
+        <button class="tus" onclick="harfTiklandi('g')">G</button>
+        <button class="tus" onclick="harfTiklandi('h')">H</button>
+        <button class="tus" onclick="harfTiklandi('j')">J</button>
+        <button class="tus" onclick="harfTiklandi('k')">K</button>
+        <button class="tus" onclick="harfTiklandi('l')">L</button>
+      </div>
+      <div class="klavye-satir">
+        <button class="tus" onclick="harfTiklandi('z')">Z</button>
+        <button class="tus" onclick="harfTiklandi('c')">C</button>
+        <button class="tus" onclick="harfTiklandi('v')">V</button>
+        <button class="tus" onclick="harfTiklandi('b')">B</button>
+        <button class="tus" onclick="harfTiklandi('n')">N</button>
+        <button class="tus" onclick="harfTiklandi('m')">M</button>
+      </div>
+      <div class="klavye-satir">
+        <button class="tus ozel" onclick="harfTiklandi('ç')">Ç</button>
+        <button class="tus ozel" onclick="harfTiklandi('ş')">Ş</button>
+        <button class="tus ozel" onclick="harfTiklandi('ğ')">Ğ</button>
+        <button class="tus ozel" onclick="harfTiklandi('ü')">Ü</button>
+        <button class="tus ozel" onclick="harfTiklandi('ö')">Ö</button>
+        <button class="tus ozel" onclick="harfTiklandi('ı')">İ</button>
+      </div>
+    </div>
+
+    <!-- Alt butonlar -->
+    <div class="alt-butonlar">
+      <button class="btn btn-itiraz" id="itirazBtn" onclick="itirazEt()">
+        ⚠️ İtiraz Et
+      </button>
+    </div>
+
+    <!-- Bilgi mesajı -->
+    <div class="bilgi-mesaj" id="bilgiMesaj"></div>
+
+  </div>
+
+  <!-- ========== TUR SONU OVERLAY ========== -->
+  <div id="turSonuOverlay" class="overlay gizli">
+    <div class="overlay-kutu">
+      <div class="sonuc-emoji" id="sonucEmoji">😅</div>
+      <h2 id="sonucBaslik">Tur Bitti!</h2>
+      <p id="sonucAciklama"></p>
+      <div class="skor-ozet" id="skorOzet"></div>
+      <p class="geri-sayim">Yeni tur başlıyor...</p>
+    </div>
+  </div>
+
+  <!-- Socket.io kütüphanesi (sunucudan otomatik gelir) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Oyun mantığımız -->
+  <script src="client.js"></script>
+</body>
+</html>
